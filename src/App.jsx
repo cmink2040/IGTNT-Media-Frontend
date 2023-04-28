@@ -1,7 +1,6 @@
 import reactLogo from './assets/react.svg'
 import IgtntLogo from './assets/IgtntLogo.svg'
 import './App.css'
-
 import TForms from './FormComp.jsx'
 import {PopupIcon} from './Note.jsx'
 
@@ -22,9 +21,10 @@ FOR DEPLOYMENT: FOR TINYMCE
 Copy the contents of the tinymce-react-demo/build directory
 to the root directory of the web server.
 */
-const BACK_URL = "http://localhost:8000/";
-const FRONT_URL = "localhost:5173";
-const TINY_KEY = 'yti5ux437cjp5s6pprt59blnl3vva1ye1uf3a7zl3zyld6pm';
+
+const BACK_URL = import.meta.env.VITE_API_BACKURL;
+const FRONT_URL = import.meta.env.VITE_API_URL;
+const TINY_KEY = import.meta.env.VITE_API_TINY;
 export default App;
 function App() {
   let location = window.location.host;
