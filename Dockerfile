@@ -5,6 +5,6 @@ WORKDIR /src
 COPY . .
 RUN yarn add vite
 RUN yarn install 
-EXPOSE 5173
+EXPOSE 8080
 CMD ["npm", "run", "dev"]
 
