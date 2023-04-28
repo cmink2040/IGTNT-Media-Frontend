@@ -25,3 +25,4 @@ dist-ssr
 
 #key hold files
 *.env
+compose-dev.yaml
