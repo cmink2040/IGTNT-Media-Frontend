@@ -2,6 +2,7 @@ import {Link} from 'react-router-dom';
 import {useState} from 'react';
 
 const TForms = (props) => {
+  // props = [[], [], [], [], []]
     // submitFunction() - pass function to control submit button
     // user - pass if form needs a username, must pass setName
     // pass - pass if form needs a password, must pass setPass(pass, setPass)
@@ -165,6 +166,6 @@ to='/contact'> Contact Us
     );
 }
 
-export default TForms;
+export  {CheckBox, TForms, Field};
 
 

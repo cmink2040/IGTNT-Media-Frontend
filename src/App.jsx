@@ -1,7 +1,8 @@
 import reactLogo from './assets/react.svg'
 import IgtntLogo from './assets/IgtntLogo.svg'
 import './App.css'
-import TForms from './FormComp.jsx'
+import {TForms} from './FormComp.jsx'
+import {TipCard,SearchBar} from './PostCard.jsx'
 import {PopupIcon} from './Note.jsx'
 
 
@@ -13,8 +14,6 @@ import {useState, useEffect, useRef} from 'react';
 import Cookies from 'js-cookie';
 import axios from 'axios';
 
-import { useSpring, animated } from '@react-spring/web';
-import { Canvas, useFrame } from '@react-three/fiber';
 import { Editor } from '@tinymce/tinymce-react';
 /* 
 FOR DEPLOYMENT: FOR TINYMCE
@@ -62,7 +61,7 @@ function App() {
   return(
     <BrowserRouter>
       <Routes>
-        { /* Home page routes www.igtneurotechnology.com*/
+        { /* Home page routes www.igtneurotechnology.com
          subdomain === FRONT_URL && 
          (
           <Route path='/' element={<NavNav logUser={loggedInUser}/>} >
@@ -71,10 +70,10 @@ function App() {
           <Route path='about'element={<Updates />}/>
           </Route>         
          )
-        }
+        */}
 
         { /*Skygate route www.skygate.igtneurotechnology.com*/
-         subdomain === 'skygate' && (
+        // subdomain === 'skygate' && (
           <Route path='/' element={<div><NavNav logUser={loggedInUser}/>
              <SApp/>
  </div>}>            
@@ -89,7 +88,7 @@ function App() {
             <Route path='setting' element={<SettingP/>} />
             <Route path='profile/:userName' element={<UserPg/>} />
           </Route>
-         )
+        // )
         }
 
         { /*cmink route www.cmink.igtneurotechnology.com */
@@ -102,27 +101,6 @@ function App() {
 
 
 
-const ReactDefault = () => {
- 
-return (
-    <div className="text-center">
-      <div className='flex  justify-center overflow-hidden'>
-      <img src={reactLogo} alt="reactlogo" className='hover:animate-spin' />
-      </div>
-  <p>
-    Edit <code>src/App.js</code> and save to reload.
-  </p>
-  <a
-    className="App-link"
-    href="https://reactjs.org"
-    target="_blank"
-    rel="noopener noreferrer"
-  >
-    Learn React
-  </a>
-</div>
-);
-}
 
 const NavNav = (props) => {
 const LoggedInInter = () => {
@@ -196,11 +174,26 @@ const LoggedOutInter = () => {
   const [showDropdown, setShowDropdown] = useState(false);
 
   const toggleDropdown = () => {
-    console.log("Toggled.");
+    console.log("Toggled");
     setShowDropdown(!showDropdown);
   }
+  const NewLink = (props) => {
+    return(
+      <Link to={props.location}
+             className=
+             { `${props.className} 
+             transition duration-500 flex justify-center items-center py-3 px-4
+             hover:bg-blue-700 rounded hover:text-sky-300 font-semibold pointer-events-auto` }>   
+            {props.picture==='true' && (
+              <img src={props.source} className="img-fluid" alt="logicon" /> 
+            )}
+                          
+               {props.captionl}    
+      </Link>
+    );
+  };
   return (
-    <div className='flex justify-end  mt-3 mr-3'>
+    <div className=' flex  '>
       <div className='flex items-center space-x-3'>
        <button 
        className='transition duration-400 hover:bg-gray-700 hover:text-blue-400
@@ -223,65 +216,30 @@ const LoggedOutInter = () => {
         Sign in
         </button>
         <img src={Icons.menu} alt="My image" 
-        className="transition duration-400 img-fluid hover:bg-gray-400 rounded" 
+        className="transition duration-400 img-fluid hover:bg-gray-400 rounded py-2" 
         onClick={toggleDropdown}/>
      </div>
+        
+   { (showDropdown)===true && ( 
     
-   {(showDropdown)===true && ( 
-   <div className="absolute text-gray-700 bg-gray-300 min-h-screen w-60
-                   h-screen  space-y-4 rounded" 
+   <div className="fixed right-0 text-gray-700 bg-sky-300 w-60
+                   h-screen  rounded-lg z-50" 
     onClick={toggleDropdown}>
-            <Link to="/login"  
-            className="transition duration-500 flex justify-center items-center 
-                       hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-            onClick={toggleDropdown}>               
-                <img src={Icons.downloadLogo} className="img-fluid" alt="logicon" />  
-                Login          
-            </Link> 
+            <NewLink location='/login' picture='true' source={Icons.downloadLogo} 
+            captionl='Login'/>
+          
+            <NewLink location='/create' picture='true' source={Icons.add} captionl='Sign Up'/>
+          
+            <NewLink location='/contact' picture='true' source={Icons.contactsupport} 
+            captionl='Contact'/>
+         
+            <NewLink location='/contact' captionl='Terms of Service'/>
+         
+            <NewLink location='/contact' captionl='Privacy Policy'/>
 
-            <Link to="/create"  
-             className="transition duration-500 flex justify-center items-center 
-             hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-            onClick={toggleDropdown}>   
-                <img src={Icons.add} className="img-fluid" alt="logicon" />           
-                Sign Up      
-            </Link>
-   
-            <Link to="/contact" 
-             className="transition duration-500 flex justify-center items-center 
-             hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-             onClick={toggleDropdown}> 
-                <img src={Icons.contactsupport} className="img-fluid" alt="logicon" />      
-                Contact         
-            </Link>
-
-            <Link to="/contact" 
-             className="transition duration-500 flex justify-center items-center 
-             hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-             onClick={toggleDropdown}> 
-            Terms of Service
-            </Link>
-
-            <Link to="/contact" 
-             className="transition duration-500 flex justify-center items-center 
-             hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-             onClick={toggleDropdown}> 
-            Privacy Policy
-            </Link>
-
-            <Link to="/contact" 
-             className="transition duration-500 flex justify-center items-center 
-             hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-             onClick={toggleDropdown}> 
-            About
-            </Link>
-
-             <Link to="/contact" 
-             className="transition duration-500 flex justify-center items-center 
-             hover:bg-gray-700 rounded hover:text-blue-400 font-semibold" 
-             onClick={toggleDropdown}> 
-            Legal
-            </Link>             
+           <NewLink location='/contact' captionl='About'/>
+          
+            <NewLink location='/contact' captionl='Legal'/>              
     </div>
     )
 }
@@ -292,29 +250,27 @@ const LoggedOutInter = () => {
 
 return(
   <div>
-    
-
-    <div className="flex flex-row">
-        <div className='flex basis-1/2 justify-start items-center space-x-3'>
+    <div className="sticky top-0  relative w-full mb-6 bg-blue-400 py-1 rounded-lg">
+        <div className='flex left-0 top-0 flex text-center items-center'>
           <Link to='/'>
-          <img src={IgtntLogo} alt='logo' className=' w-10 h-10 mt-2 ml-3 '/>
+          <img src={IgtntLogo} alt='logo' className=' w-10 h-10  ml-3 '/>
           </Link>
             <div className=' transition ease-in	duration-100 hover:scale-125 
-              hover:text-blue-500 font-mono text-center '> IGTNT 
+              hover:text-blue-500 font-mono ml-2 text-center '> 
+              IGTNT 
             </div>
-            
-        </div>
 
-        <div className='basis-1/2 justify-end '>
+            <div className='flex justify-end w-full pr-2'>
           {(props.logUser!=='') ? 
           <LoggedInInter us={props.logUser} 
           /> 
           :
-          <LoggedOutInter
-          
-          />
+          <LoggedOutInter />
           }         
         </div>
+        </div>
+
+        
     </div>
    
 
@@ -336,10 +292,10 @@ const Updates = () => {}
 //: /app
 const SApp = () => {
 return(
-<div className='container'>  
-<nav className="flex row justify-around">
+<nav className="fixed flex flex-row mx-auto justify-around bottom-0 w-full bg-blue-400 pt-3 
+rounded-lg">
       <div>
-        <Link to="/">
+        <Link to="/" className=''>
                 <img src={Icons.home} className="img-fluid" alt="logicon" />            
           </Link>
       </div>
@@ -365,7 +321,7 @@ return(
         </Link>
       </div>
     </nav>
-</div>
+
 );
 }
 
@@ -408,11 +364,23 @@ return (
 
 //: /app/home/
 const UserHome = () => {
-
+  return(
+    <div className='m-4'>
+      fqwefwef
+      <TipCard/>
+    </div>
+  );
 }
 
 //: /app/search/
-const UserSearch = () => {}
+const UserSearch = () => {
+  return(
+    <div>
+      <SearchBar/>
+    </div>
+  );
+
+}
 
 //: /app/makenewpost/
 const MakeNewPost = () => {
