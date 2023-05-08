@@ -1,7 +1,7 @@
 import reactLogo from './assets/react.svg'
 import IgtntLogo from './assets/IgtntLogo.svg'
 import './App.css'
-import {TForms} from './FormComp.jsx'
+import {TForms,Field} from './FormComp.jsx'
 import {TipCard,SearchBar} from './PostCard.jsx'
 import {PopupIcon} from './Note.jsx'
 
@@ -233,13 +233,13 @@ const LoggedOutInter = () => {
             <NewLink location='/contact' picture='true' source={Icons.contactsupport} 
             captionl='Contact'/>
          
-            <NewLink location='/contact' captionl='Terms of Service'/>
+            <NewLink location='/terms' captionl='Terms of Service'/>
          
-            <NewLink location='/contact' captionl='Privacy Policy'/>
+            <NewLink location='/privacy' captionl='Privacy Policy'/>
 
-           <NewLink location='/contact' captionl='About'/>
+           <NewLink location='/about' captionl='About'/>
           
-            <NewLink location='/contact' captionl='Legal'/>              
+            <NewLink location='/legal' captionl='Legal'/>              
     </div>
     )
 }
@@ -250,7 +250,7 @@ const LoggedOutInter = () => {
 
 return(
   <div>
-    <div className="sticky top-0  relative w-full mb-6 bg-blue-400 py-1 rounded-lg">
+    <div className="sticky top-0  relative w-full bg-blue-400 py-1 rounded-lg">
         <div className='flex left-0 top-0 flex text-center items-center'>
           <Link to='/'>
           <img src={IgtntLogo} alt='logo' className=' w-10 h-10  ml-3 '/>
@@ -493,44 +493,87 @@ props.logOut();
 const Create = () => {
   const [name, setName] = useState();
   const [passw, setPass] = useState();
-  const [email, setEmail] = useState(false);
+  const [email, setEmail] = useState();
+  const [showEmail, toggle] = useState(false);
  const navigate = useNavigate();
+ /* Username and Password Verification */
  const handleSubmit = async (event) =>  {
-  event.preventDefault();
-  
+  event.preventDefault(); 
+
   const results = await axios.get(BACK_URL + "User/" + name + "/");
   console.log(results.data[0]);
   console.log(results.data);
   console.log(results.data.length);
+  //TESTING PURPOSES:
+  
   if(results.data.length === 0) {
-    /* validate pass & email */
-    const Obji = {
-      name: name,
-      password: passw,
-      email: email
-    }
-    axios.post(BACK_URL + "User/" + name + "/", Obji);
-    console.log("Perosn made");
-    /* login */
-    navigate('/home');
+    toggle(true);
   }
   else {
     console.log("FAILED!");
     /*Display Error */
   }
 }
+  const handleSubmitStep2 = (event) => {
+    event.preventDefault();
+    /* Render Email Vertification */
+    /* validate pass & email */
+    if(passw.length()<6) {
+      console.log("FAILED");
+      /*Display Error*/
+      return null;
+    }
+    const Obji = {
+      name: name,
+      password: passw,
+      email: email
+    }
+    axios.post(BACK_URL + "User/" + name + "/", Obji);
+    console.log("Person made");
+    /* login */
+    navigate('/home');
+  };
+
+
+  function submitTest(event) {
+    event.preventDefault(); 
+    toggle(true);
+  }
 return(
   <div className='w-full h-screen bg-gray-400 pt-24'>  
    <TForms 
     username={true}
-    setName={setName}
+    setName={(e)=>setName(e)}
     password={true}
-    setPass={setPass}
+    setPass={(e)=>setPass(e)}
     email={true}
+    setEmail={(e)=>setEmail(e)}
     staylogged={true}
-    submitFunction={handleSubmit}
+    submitFunction={
+     // handleSubmit
+     submitTest
+    }
     tos={true}
   />
+  { showEmail && (
+  <div className='fixed inset-0 flex justify-center items-center'>
+    <TForms 
+    submitFunction={
+      handleSubmitStep2
+    }
+      email={true}
+      setEmail={(e)=>setEmail(e)}
+      label='Verify your Email'
+      type='email'
+      place="6 Digit Code"
+      value={email}
+       name='email'
+
+    />
+    
+  </div>
+  )
+  }
 
   </div>
   );

@@ -12,7 +12,16 @@ const TForms = (props) => {
     // toggle - checkmark depending on need setToggle
 
     // Link buttons, pass description and route
-
+    if(props.customize)
+    return(
+      <div>
+      {props.myArray.map((item, index) => (
+          <div key={index}>{item}
+          </div>
+        ))}
+      </div>
+      
+    );
     return (
         <div>
             <form onSubmit={props.submitFunction} 
@@ -24,7 +33,7 @@ const TForms = (props) => {
     label='Signin ID*'
     place='User1032'
     value={props.username}
-    setMethod={props.setPass}
+    setMethod={(e)=>props.setName(e)}
     name='username'
     onChange={props.setName}
     />
@@ -34,7 +43,7 @@ const TForms = (props) => {
     type='email'
     place="User1032@gmail.com"
     value={props.email}
-    onChange={props.setEmail}
+    setMethod={(e)=>props.setEmail(e)}
     name='email'
     />   
 
@@ -43,7 +52,7 @@ const TForms = (props) => {
     place="************"
     type='password'
     value={props.password}
-    onChange={props.setPass}
+    setMethod={(e)=>props.setPass(e)}
     name='password'
     />   
 
